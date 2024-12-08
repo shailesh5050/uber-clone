@@ -2,8 +2,10 @@ import dotenv from "dotenv";
 dotenv.config();
 import cors from "cors";
 import express from "express";
+import cookieParser from "cookie-parser";
 import userRouter from "./routes/user.routes.js";
 const app = express();
+app.use(cookieParser());
 import dbConnection from "./db/db.js";
 
 app.use(cors());

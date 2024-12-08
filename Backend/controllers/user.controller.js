@@ -38,8 +38,16 @@ export async function loginUser(req, res, next) {
       return res.status(401).json({ message: "Invalid email or password" });
     }
     const token = user.generateAuthToken();
+    res.cookie("token", token, {
+      maxAge: 1000 * 60 * 60 * 24 * 7, // 1 week
+      httpOnly: true,
+    });
     res.status(200).json({ user, token });
   } catch (error) {
     next(error);
   }
+}
+
+export async function getUserProfile(req, res, next) {
+  res.status(200).json({ user: req.user });
 }
