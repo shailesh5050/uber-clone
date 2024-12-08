@@ -7,7 +7,7 @@ Register a new user in the system.
 ### Request
 
 - **Method:** POST
-- **URL:** `/register`
+- **URL:** `user/register`
 - **Content-Type:** application/json
 
 ### Request Body
