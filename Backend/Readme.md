@@ -111,3 +111,98 @@ curl -X POST http://your-api-url/register \
     "password": "securepassword123"
   }'
 ```
+## Endpoint: `/login`
+
+Authenticate an existing user and receive a JWT token.
+
+### Request
+
+- **Method:** POST
+- **URL:** `/login`
+- **Content-Type:** application/json
+
+### Request Body
+
+```json
+{
+  "email": "string",
+  "password": "string"
+}
+```
+
+### Validation Rules
+
+- **email:**
+  - Required
+  - Must be valid email format
+
+- **password:**
+  - Required
+  - Minimum length: 5 characters
+
+### Success Response
+
+- **Status Code:** 200 (OK)
+- **Content-Type:** application/json
+
+```json
+{
+  "user": {
+    "fullname": {
+      "firstname": "string",
+      "lastname": "string"
+    },
+    "email": "string",
+    "avatar": "string",
+    "coverImage": "string",
+    "socketId": "string",
+    "createdAt": "timestamp",
+    "updatedAt": "timestamp"
+  },
+  "token": "JWT_TOKEN"
+}
+```
+
+### Error Responses
+
+#### Validation Error
+- **Status Code:** 400
+- **Content:**
+```json
+{
+  "message": [
+    {
+      "msg": "error message",
+      "param": "field_name",
+      "location": "body"
+    }
+  ]
+}
+```
+
+#### Authentication Error
+- **Status Code:** 400 or 401
+- **Content:**
+```json
+{
+  "message": "Invalid email or password"
+}
+```
+
+### Notes
+
+- Password is compared with hashed password in database
+- JWT token is generated upon successful authentication
+- Token expires in 1 day
+- Password field is not included in the response
+
+### Example Usage
+
+```bash
+curl -X POST http://your-api-url/login \
+  -H "Content-Type: application/json" \
+  -d '{
+    "email": "john.doe@example.com",
+    "password": "securepassword123"
+  }'
+```
