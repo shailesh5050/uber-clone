@@ -1,6 +1,6 @@
 import jwt from "jsonwebtoken";
 import userModel from "../models/user.model.js";
-
+import BlacklistTokenModel from "../models/blackListToken.model.js";
 async function authUser(req, res, next) {
   try {
     // Get token from Authorization header or cookies
@@ -13,6 +13,9 @@ async function authUser(req, res, next) {
         .status(401)
         .json({ message: "Unauthorized: No token provided" });
     }
+
+    //find blacklisted token
+    const blacklistedToken = await BlacklistTokenModel.findOne({ token });
 
     // Verify the token
     const decoded = jwt.verify(token, process.env.JWT_SECRET);

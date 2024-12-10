@@ -206,3 +206,50 @@ curl -X POST http://your-api-url/login \
     "password": "securepassword123"
   }'
 ```
+
+I'll help you add documentation for the user logout route in the README.md file.
+
+```markdown README.md
+## User Logout
+
+### Endpoint `/user/logout`
+```
+POST user/logout
+```
+
+### Description
+Logs out the currently authenticated user by clearing their authentication token.
+
+### Authentication
+Requires a valid authentication token in the request header.
+
+### Request Headers
+```
+Authorization: Bearer <token>
+```
+
+### Response
+
+#### Success (200 OK)
+```json
+{
+  "message": "User logged out successfully"
+}
+```
+
+#### Error Responses
+
+##### Unauthorized (401)
+```json
+{
+  "error": "Unauthorized - Please login first"
+}
+```
+
+### Example Usage
+```bash
+curl -X POST \
+  http://localhost:3000/api/users/logout \
+  -H 'Authorization: Bearer your-auth-token'
+```
+```
