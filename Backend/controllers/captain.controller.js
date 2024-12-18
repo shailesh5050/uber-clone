@@ -7,7 +7,7 @@ export async function captainRegister(req, res) {
   if (!errors.isEmpty()) {
     return res.status(400).json({ errors: errors.array() });
   }
-  const { fullname, email, password, vehiicle } = req.body;
+  const { fullname, email, password, vehicle } = req.body;
   const existingCaptain = await CaptainModel.findOne({ email });
   if (existingCaptain) {
     return res.status(400).json({ msg: "captain already exist" });
@@ -18,10 +18,10 @@ export async function captainRegister(req, res) {
     lastname: fullname.lastname,
     email,
     password: hashedPassword,
-    plate: vehiicle.plate,
-    color: vehiicle.color,
-    capacity: vehiicle.capacity,
-    vehicleType: vehiicle.vehicleType,
+    plate: vehicle.plate,
+    color: vehicle.color,
+    capacity: vehicle.vehicleCapacity,
+    vehicleType: vehicle.type,
   });
   const token = await captain.generateAuthToken();
   res.cookie("token", token, {

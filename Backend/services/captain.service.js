@@ -40,9 +40,9 @@ export async function createCaptainService({
       },
       email,
       password,
-      vehiicle: {
-        plate,
+      vehicle: {
         color,
+        plate,
         capacity,
         vehicleType,
       },

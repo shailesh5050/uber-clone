@@ -1,15 +1,46 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
-
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
+import { useCaptainData } from "../Context/CaptainContext";
 const CaptainLogin = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [userData, setUserData] = useState({});
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
+  const { setCaptainData } = useCaptainData();
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     // Add login logic here
+    setLoading(true);
+
+    try {
+      const response = await axios.post(
+        `${import.meta.env.VITE_BASE_URL}/captain/login`,
+        {
+          email,
+          password,
+        }
+      );
+
+      if (response.data.token) {
+        localStorage.setItem("captain-token", response.data.token);
+        setCaptainData(response.data.captain);
+        setIsLoggedIn(true);
+        // toast.success("Login successful!");
+        navigate("/captain-home");
+      }
+    } catch (error) {
+      toast.error(error.response?.data?.message || "Login failed");
+    } finally {
+      setLoading(false);
+      setPassword("");
+      setEmail("");
+    }
+
     setUserData({ email, password });
     console.log("Login attempted:", userData);
     setPassword("");
@@ -69,6 +100,7 @@ const CaptainLogin = () => {
 
           <div className="flex flex-col">
             <button
+              disabled={loading}
               type="submit"
               className="bg-black text-white font-bold py-2 px-4 
                          rounded focus:outline-none focus:shadow-outline transition duration-300 w-full"

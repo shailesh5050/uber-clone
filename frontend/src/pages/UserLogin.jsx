@@ -1,16 +1,38 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
-
+import { Link, useNavigate } from "react-router-dom";
+import { useUserData } from "../Context/UserContext";
+import axios from "axios";
 const UserLogin = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [userData, setUserData] = useState({});
   const [isLoggedIn, setIsLoggedIn] = useState(false);
-
-  const handleSubmit = (e) => {
+  const { setUser } = useUserData();
+  const navigate = useNavigate();
+  const handleSubmit = async (e) => {
     e.preventDefault();
     // Add login logic here
-    setUserData({ email, password });
+
+    const userDataObj = { email, password };
+    try {
+      const res = await axios.post(
+        `${import.meta.env.VITE_BASE_URL}/user/login`,
+        userDataObj
+      );
+
+      if (res.status === 200) {
+        alert("Login successfully");
+        setUser(res.data.user);
+        localStorage.setItem("token", res.data.token);
+        navigate("/home");
+      } else {
+        alert(res.data.message);
+      }
+    } catch (error) {
+      console.error(error);
+      alert(error.response?.data?.message || "An error occurred");
+    }
+
     console.log("Login attempted:", userData);
     setPassword("");
     setEmail("");

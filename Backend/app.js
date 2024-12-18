@@ -9,7 +9,13 @@ const app = express();
 app.use(cookieParser());
 import dbConnection from "./db/db.js";
 
-app.use(cors());
+app.use(
+  cors({
+    origin: "http://localhost:5173", // Allow your frontend's origin
+    methods: ["GET", "POST", "PUT", "DELETE"], // Allowed HTTP methods
+    credentials: true, // Allow credentials (cookies, authorization headers, etc.)
+  })
+);
 app.use(express.json());
 dbConnection();
 

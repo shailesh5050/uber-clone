@@ -9,6 +9,12 @@ export async function resgisterUser(req, res, next) {
       return res.status(400).json({ message: error.array() });
     }
     const { fullname, email, password } = req.body;
+    //check if user exists
+    const userExist = await userModel.findOne({ email });
+    if (userExist) {
+      return res.status(400).json({ message: "User already exists" });
+    }
+
     const hashedPassword = await userModel.hashPassword(password);
     const user = await createUser({
       firstname: fullname.firstname,

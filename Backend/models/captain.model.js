@@ -29,7 +29,7 @@ const captainSchema = new mongoose.Schema({
     enum: ["active", "inactive"],
     default: "active",
   },
-  vehiicle: {
+  vehicle: {
     color: {
       type: String,
       required: true,

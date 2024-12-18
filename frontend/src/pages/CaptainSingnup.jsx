@@ -1,33 +1,57 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
-
+import { useCaptainData } from "../Context/CaptainContext";
+import { useNavigate } from "react-router-dom";
+import axios from "axios";
 const CaptainSignup = () => {
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("");
-  const [userData, setUserData] = useState({});
+  const [vehicleType, setVehicleType] = useState("");
+  const [vehicleColor, setVehicleColor] = useState("");
+  const [vehiclePlate, setVehiclePlate] = useState("");
+  const [vehicleCapacity, setVehicleCapacity] = useState("");
 
-  const handleSubmit = (e) => {
+  const { captain, setCaptain } = useCaptainData();
+  const navigate = useNavigate();
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
-
-    // Basic validation
-    if (password !== confirmPassword) {
-      alert("Passwords do not match!");
-      return;
-    }
 
     // Registration logic
     const userDataObj = {
       fullname: {
-        firstName,
-        lastName,
+        firstname: firstName,
+        lastname: lastName,
+      },
+      vehicle: {
+        color: vehicleColor,
+        plate: vehiclePlate,
+        type: vehicleType,
+        vehicleCapacity: vehicleCapacity,
       },
       email,
       password,
     };
-    setUserData(userDataObj);
+    try {
+      const res = await axios.post(
+        `${import.meta.env.VITE_BASE_URL}/captain/register`,
+        userDataObj
+      );
+
+      if (res.status === 201) {
+        alert("Account created successfully");
+        setCaptain(res.data.user);
+        localStorage.setItem("captain-token", res.data.token);
+        navigate("/captain-home");
+      } else {
+        alert(res.data.message);
+      }
+    } catch (error) {
+      console.error(error);
+      alert(error.response?.data?.message || "An error occurred");
+    }
 
     console.log("Registration attempted:", userData);
 
@@ -36,7 +60,10 @@ const CaptainSignup = () => {
     setLastName("");
     setEmail("");
     setPassword("");
-    setConfirmPassword("");
+    setVehicleType("");
+    setVehicleColor("");
+    setVehiclePlate("");
+    setVehicleCapacity("");
   };
 
   return (
@@ -133,24 +160,87 @@ const CaptainSignup = () => {
             />
           </div>
 
-          <div className="mb-6">
+          <div className="mb-4">
             <label
-              htmlFor="confirmPassword"
+              htmlFor="vehicleType"
               className="block text-gray-700 text-sm font-bold mb-2"
             >
-              Confirm Password
+              Vehicle Type
+            </label>
+            <select
+              id="vehicleType"
+              value={vehicleType}
+              onChange={(e) => setVehicleType(e.target.value)}
+              required
+              className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 
+                       leading-tight focus:outline-none focus:ring-2 focus:ring-blue-500 
+                       focus:border-transparent"
+            >
+              <option value="">Select Vehicle Type</option>
+              <option value="car">Car</option>
+              <option value="bike">Bike</option>
+              <option value="auto">Auto</option>
+            </select>
+          </div>
+
+          <div className="mb-4">
+            <label
+              htmlFor="vehicleColor"
+              className="block text-gray-700 text-sm font-bold mb-2"
+            >
+              Vehicle Color
             </label>
             <input
-              type="password"
-              id="confirmPassword"
-              value={confirmPassword}
-              onChange={(e) => setConfirmPassword(e.target.value)}
-              placeholder="Confirm your password"
+              type="text"
+              id="vehicleColor"
+              value={vehicleColor}
+              onChange={(e) => setVehicleColor(e.target.value)}
+              placeholder="Enter vehicle color"
               required
-              minLength={6}
               className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 
-                         mb-3 leading-tight focus:outline-none focus:ring-2 focus:ring-blue-500 
-                         focus:border-transparent"
+                       leading-tight focus:outline-none focus:ring-2 focus:ring-blue-500 
+                       focus:border-transparent"
+            />
+          </div>
+
+          <div className="mb-4">
+            <label
+              htmlFor="vehiclePlate"
+              className="block text-gray-700 text-sm font-bold mb-2"
+            >
+              Vehicle Plate Number
+            </label>
+            <input
+              type="text"
+              id="vehiclePlate"
+              value={vehiclePlate}
+              onChange={(e) => setVehiclePlate(e.target.value)}
+              placeholder="Enter vehicle plate number"
+              required
+              className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 
+                       leading-tight focus:outline-none focus:ring-2 focus:ring-blue-500 
+                       focus:border-transparent"
+            />
+          </div>
+
+          <div className="mb-6">
+            <label
+              htmlFor="vehicleCapacity"
+              className="block text-gray-700 text-sm font-bold mb-2"
+            >
+              Vehicle Capacity
+            </label>
+            <input
+              type="number"
+              id="vehicleCapacity"
+              value={vehicleCapacity}
+              onChange={(e) => setVehicleCapacity(e.target.value)}
+              placeholder="Enter vehicle capacity"
+              required
+              min="1"
+              className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 
+                       leading-tight focus:outline-none focus:ring-2 focus:ring-blue-500 
+                       focus:border-transparent"
             />
           </div>
 
@@ -164,7 +254,7 @@ const CaptainSignup = () => {
             </button>
 
             <Link
-              to="/login"
+              to="/captain-login"
               type="button"
               className="text-center mb-10 mt-1 text-sm"
             >

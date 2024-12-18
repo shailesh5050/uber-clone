@@ -37,21 +37,21 @@ captainRouter.post(
       .withMessage("Email is required"),
 
     // Validate vehiicle.color
-    body("vehiicle.color")
+    body("vehicle.color")
       .isString()
       .withMessage("Vehicle color must be a string")
       .notEmpty()
       .withMessage("Vehicle color is required"),
 
     // Validate vehiicle.plate
-    body("vehiicle.plate")
+    body("vehicle.plate")
       .isString()
       .withMessage("Vehicle plate must be a string")
       .notEmpty()
       .withMessage("Vehicle plate is required"),
 
     // Validate vehiicle.model
-    body("vehiicle.model")
+    body("vehicle.model")
       .optional()
       .isString()
       .withMessage("Vehicle model must be a string"),

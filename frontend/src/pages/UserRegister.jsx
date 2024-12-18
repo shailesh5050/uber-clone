@@ -1,15 +1,18 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import axios from "axios";
+import { useUserData } from "../Context/UserContext";
 
 const UserRegister = () => {
+  const navigate = useNavigate();
+
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
-  const [userData, setUserData] = useState({});
-
-  const handleSubmit = (e) => {
+  const { user, setUser } = useUserData();
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
     // Basic validation
@@ -21,15 +24,31 @@ const UserRegister = () => {
     // Registration logic
     const userDataObj = {
       fullname: {
-        firstName,
-        lastName,
+        firstname: firstName,
+        lastname: lastName,
       },
       email,
       password,
     };
-    setUserData(userDataObj);
 
-    console.log("Registration attempted:", userData);
+    try {
+      const res = await axios.post(
+        `${import.meta.env.VITE_BASE_URL}/user/register`,
+        userDataObj
+      );
+
+      if (res.status === 201) {
+        alert("Account created successfully");
+        setUser(res.data.user);
+        localStorage.setItem("token", res.data.token);
+        navigate("/login");
+      } else {
+        alert(res.data.message);
+      }
+    } catch (error) {
+      console.error(error);
+      alert(error.response?.data?.message || "An error occurred");
+    }
 
     // Reset form fields
     setFirstName("");
