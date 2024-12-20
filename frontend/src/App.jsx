@@ -12,7 +12,7 @@ import UserLogout from "./pages/UserLogout";
 import CaptainProtectWrapper from "./pages/CaptainProtectWrapper";
 const App = () => {
   return (
-    <div className="bg-red-500">
+    <div className="">
       <Routes>
         <Route path="/" element={<Start />} />
         <Route path="/login" element={<UserLogin />} />
