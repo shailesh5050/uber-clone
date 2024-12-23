@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 
 const Start = () => {
   return (
@@ -10,9 +11,12 @@ const Start = () => {
       />
       <div className="text-center">
         <h2 className="text-2xl font-bold mb-2">Get Started with Uber</h2>
-        <button className="w-72 py-3 rounded-md mx-1 bg-black mb-5 text-white">
+        <Link 
+          to="/login" 
+          className="inline-block w-72 py-3 rounded-md mx-1 bg-black mb-5 text-white"
+        >
           Continue
-        </button>
+        </Link>
       </div>
     </div>
   );
