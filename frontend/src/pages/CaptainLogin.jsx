@@ -3,6 +3,8 @@ import { Link } from "react-router-dom";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { useCaptainData } from "../Context/CaptainContext";
+import toast, { Toaster } from 'react-hot-toast';
+
 const CaptainLogin = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -30,11 +32,11 @@ const CaptainLogin = () => {
         localStorage.setItem("captain-token", response.data.token);
         setCaptainData(response.data.captain);
         setIsLoggedIn(true);
-        // toast.success("Login successful!");
+        toast.success("Login successful!");
         navigate("/captain-home");
       }
     } catch (error) {
-      toast.error(error.response?.data?.message || "Login failed");
+       toast.error(error.response?.data?.message || "Login failed");
     } finally {
       setLoading(false);
       setPassword("");

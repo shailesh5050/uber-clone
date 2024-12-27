@@ -4,7 +4,8 @@ import "remixicon/fonts/remixicon.css";
 import LocationSearchPanel from "../Components/LocationSearchPanel";
 import VehiclePanel from "../Components/VehiclePanel";
 import ConfirmRide from "../Components/ConfirmRide";
-
+import LookingForDriver from "../Components/LookingForDriver";
+import WaitingForDriver from "../Components/WaitingForDriver";
 // Custom hook for GSAP animations
 const useGSAP = (animationCallback, dependencies) => {
   useEffect(() => {
@@ -16,10 +17,14 @@ const Home = () => {
   const [panelOpen, setPanelOpen] = useState(false);
   const [vehiclePanel, setVehiclePanel] = useState(false);
   const [confirmRidePanelOpen, setConfirmRidePanelOpen] = useState(false);
+  const [lookingForDriverPanelOpen, setLookingForDriverPanelOpen] = useState(false);
+  const [waitingForDriverPanelOpen, setWaitingForDriverPanelOpen] = useState(false);
   const panalRef = useRef(null);
   const vehiclePanelRef = useRef(null);
   const closePanelIconRef = useRef(null);
   const confirmRidePanelRef = useRef(null);
+  const lookingForDriverPanelRef = useRef(null);
+  const waitingForDriverPanelRef = useRef(null);
   const [formData, setFormData] = useState({
     location: "",
     destination: "",
@@ -94,6 +99,30 @@ const Home = () => {
       });
     }
   }, [confirmRidePanelOpen]);
+
+  // GSAP animation for the looking for driver panel
+  useGSAP(() => {
+    if (lookingForDriverPanelOpen) {
+      gsap.to(lookingForDriverPanelRef.current, {
+        y: 0,
+      });
+    }else{
+      gsap.to(lookingForDriverPanelRef.current, {
+        y: "100%",
+      });
+
+    }
+  }, [lookingForDriverPanelOpen]);
+
+  // GSAP animation for the waiting for driver panel
+  useGSAP(() => {
+    if (waitingForDriverPanelOpen) {
+      gsap.to(waitingForDriverPanelRef.current, {
+        y: 0,
+      });
+    }
+  }, [waitingForDriverPanelOpen]);
+
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -173,11 +202,29 @@ const Home = () => {
       >
         <VehiclePanel setConfirmRidePanelOpen={setConfirmRidePanelOpen} />
       </div>
+
+      {/***************** Confirm Ride Panel ************************/}
       <div
         ref={confirmRidePanelRef}
         className="fixed w-full z-10 bottom-0 bg-white px-3 py-10 pt-14 translate-y-full"
       >
-        <ConfirmRide setConfirmRidePanelOpen={setConfirmRidePanelOpen} />
+        <ConfirmRide setConfirmRidePanelOpen={setConfirmRidePanelOpen} setLookingForDriverPanelOpen={setLookingForDriverPanelOpen} />
+      </div>
+
+      {/***************** Looking For Driver Panel ************************/}
+      <div
+        ref={lookingForDriverPanelRef}
+        className="fixed w-full z-10 bottom-0 bg-white px-3 py-10 pt-14 translate-y-full"
+      >
+        <LookingForDriver setConfirmRidePanelOpen={setConfirmRidePanelOpen} />
+      </div>
+
+      {/***************** Waiting For Driver Panel ************************/}
+      <div
+        ref={waitingForDriverPanelRef}
+        className="fixed w-full z-10 bottom-0 bg-white px-3 py-10 pt-14 translate-y-full"
+      >
+        <WaitingForDriver setWaitingForDriverPanelOpen={setWaitingForDriverPanelOpen} />
       </div>
     </div>
   );
