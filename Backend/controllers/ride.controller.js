@@ -14,5 +14,15 @@ export const createRide = async (req, res) => {
         res.status(500).json({ error: error.message });
     }
 };
+export const getFair = async (req, res) => {
+    try {
+        const { pickup, destination } = req.body;
+        const fair = await rideService.getFare(pickup, destination);
+        res.status(200).json(fair);
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+}
+
 
 

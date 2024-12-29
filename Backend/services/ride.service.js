@@ -1,3 +1,4 @@
+import { get } from "http";
 import RideModel from "../models/ride.model.js";
 import {getDistanceTimeData} from "./maps.service.js"
 import crypto from "crypto";
@@ -59,6 +60,7 @@ const createRide = async ({ userId, pickup, destination, vehicleType}) => {
 export default {
     // ...existing exports...
     createRide,
+    getFare,
 };
 
 //create a array that have 10  fake users json

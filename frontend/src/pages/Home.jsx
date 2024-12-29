@@ -26,6 +26,7 @@ const Home = () => {
   const confirmRidePanelRef = useRef(null);
   const lookingForDriverPanelRef = useRef(null);
   const waitingForDriverPanelRef = useRef(null);
+  const [fair, setFair] = useState(0);
   const [formData, setFormData] = useState({
     location: "",
     destination: "",
@@ -129,9 +130,6 @@ const Home = () => {
     e.preventDefault();
 
     if (formData.location && formData.destination) {
-      alert(
-        `Searching trip from ${formData.location} to ${formData.destination}`
-      );
       setFormData({
         location: "",
         destination: "",
@@ -188,6 +186,27 @@ useEffect(() => {
   }
   , [formData]);
 
+  //function to get the fair of the ride
+  async function getFair() {
+    try {
+      const response = await axios.post(`${import.meta.env.VITE_BASE_URL}/ride/get-fair`, {
+        pickup: formData.location,
+        destination: formData.destination,
+      }, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      });
+      setFair(response.data);
+    } catch (error) {
+      console.error('Error fetching fair:', error);
+    }
+  }
+  function findTrip() {
+    getFair();
+    setVehiclePanel(true);
+  }
+
   
 
   return (
@@ -240,7 +259,7 @@ useEffect(() => {
                 type="submit"
                 className="bg-black text-white w-full py-2 rounded-lg mt-3"
                 onClick={() => {
-                  setVehiclePanel(true);
+                  findTrip();
                 }
                 }
               >
@@ -262,12 +281,14 @@ useEffect(() => {
       </div>
 
       {/***************** Vehicle Panel ************************/}
-      <div
-        ref={vehiclePanelRef}
-        className="fixed translate-y-full w-full bg-white p-5 z-10 bottom-0"
-      >
-        <VehiclePanel setConfirmRidePanelOpen={setConfirmRidePanelOpen} />
-      </div>
+     
+        <div
+          ref={vehiclePanelRef}
+          className="fixed translate-y-full w-full bg-white p-5 z-10 bottom-0"
+        >
+          <VehiclePanel setConfirmRidePanelOpen={setConfirmRidePanelOpen} fair={fair} />
+        </div>
+     
 
       {/***************** Confirm Ride Panel ************************/}
       <div
