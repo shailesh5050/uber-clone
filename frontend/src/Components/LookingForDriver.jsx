@@ -1,4 +1,4 @@
-const LookingForDriver = () => {
+const LookingForDriver = (props) => {
   return (
     <div>
          <h5 className='p-1 text-center w-[93%] absolute top-0' 
@@ -11,21 +11,21 @@ const LookingForDriver = () => {
                     <div className='flex items-center gap-5 p-3 border-b-2'>
                         <i className="ri-map-pin-user-fill"></i>
                         <div>
-                            <h3 className='text-lg font-medium'>562/11-A</h3>
-                            <p className='text-sm -mt-1 text-gray-600'>Rajajipuram ,Lucknow</p>
+                        <h3 className='text-lg font-medium'>{props.pickup.split(',')[0]}</h3>
+                        <p className='text-sm -mt-1 text-gray-600'>{props.pickup}</p>
                         </div>
                     </div>
                     <div className='flex items-center gap-5 p-3 border-b-2'>
                         <i className="text-lg ri-map-pin-2-fill"></i>
                         <div>
-                            <h3 className='text-lg font-medium'>562/11-A</h3>
-                            <p className='text-sm -mt-1 text-gray-600'>Alambagh ,Krishna Nagar Lucknow</p>
+                        <h3 className='text-lg font-medium'>{props.destination.split(',')[0]}</h3>
+                        <p className='text-sm -mt-1 text-gray-600'>{props.destination}</p>
                         </div>
                     </div>
                     <div className='flex items-center gap-5 p-3'>
                         <i className="ri-currency-line"></i>
                         <div>
-                            <h3 className='text-lg font-medium'>₹123</h3>
+                            <h3 className='text-lg font-medium'>₹{props.fair}</h3>
                             <p className='text-sm -mt-1 text-gray-600'>Cash Cash</p>
                         </div>
                     </div>

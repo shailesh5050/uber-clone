@@ -27,6 +27,7 @@ const Home = () => {
   const lookingForDriverPanelRef = useRef(null);
   const waitingForDriverPanelRef = useRef(null);
   const [fair, setFair] = useState(0);
+  const [selectedVehicle, setSelectedVehicle] = useState(""); 
   const [formData, setFormData] = useState({
     location: "",
     destination: "",
@@ -130,10 +131,6 @@ const Home = () => {
     e.preventDefault();
 
     if (formData.location && formData.destination) {
-      setFormData({
-        location: "",
-        destination: "",
-      });
       setPanelOpen(false);
     } else {
       alert("Please fill in both fields!");
@@ -143,6 +140,7 @@ const [suggestions, setSuggestions] = useState([]);
 const [selectedInput, setSelectedInput] = useState('');
 const debounceTimer = useRef(null);
 
+// Fetch suggestions when user types in location or destination input fields and debounce the API calls
 useEffect(() => {
   if (formData.location || formData.destination) {
     if (debounceTimer.current) {
@@ -207,6 +205,24 @@ useEffect(() => {
     setVehiclePanel(true);
   }
 
+  //function to book a ride
+  async function createRide() {
+   // console.log(pickup, destination, selectedVehicle);
+    try {
+      const response = await axios.post(`${import.meta.env.VITE_BASE_URL}/ride/create-ride`, {
+        pickup: formData.location,
+        destination: formData.destination,
+        vehicleType: selectedVehicle,
+      }, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      });
+      setLookingForDriverPanelOpen(true);
+    } catch (error) {
+      console.error('Error booking ride:', error);  
+    }
+  }
   
 
   return (
@@ -286,7 +302,7 @@ useEffect(() => {
           ref={vehiclePanelRef}
           className="fixed translate-y-full w-full bg-white p-5 z-10 bottom-0"
         >
-          <VehiclePanel setConfirmRidePanelOpen={setConfirmRidePanelOpen} fair={fair} />
+          <VehiclePanel setSelectedVehicle={setSelectedVehicle} setConfirmRidePanelOpen={setConfirmRidePanelOpen} fair={fair} />
         </div>
      
 
@@ -295,7 +311,12 @@ useEffect(() => {
         ref={confirmRidePanelRef}
         className="fixed w-full z-10 bottom-0 bg-white px-3 py-10 pt-14 translate-y-full"
       >
-        <ConfirmRide setConfirmRidePanelOpen={setConfirmRidePanelOpen} setLookingForDriverPanelOpen={setLookingForDriverPanelOpen} />
+        <ConfirmRide 
+          createRide={createRide}
+          pickup={formData.location}
+          destination={formData.destination}
+          fair={fair[selectedVehicle]}
+        setConfirmRidePanelOpen={setConfirmRidePanelOpen} setLookingForDriverPanelOpen={setLookingForDriverPanelOpen} />
       </div>
 
       {/***************** Looking For Driver Panel ************************/}
@@ -303,7 +324,11 @@ useEffect(() => {
         ref={lookingForDriverPanelRef}
         className="fixed w-full z-10 bottom-0 bg-white px-3 py-10 pt-14 translate-y-full"
       >
-        <LookingForDriver setConfirmRidePanelOpen={setConfirmRidePanelOpen} />
+        <LookingForDriver 
+        pickup={formData.location}
+        destination={formData.destination}
+        fair={fair[selectedVehicle]}
+        setConfirmRidePanelOpen={setConfirmRidePanelOpen} />
       </div>
 
       {/***************** Waiting For Driver Panel ************************/}
