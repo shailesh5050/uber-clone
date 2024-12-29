@@ -6,6 +6,7 @@ import VehiclePanel from "../Components/VehiclePanel";
 import ConfirmRide from "../Components/ConfirmRide";
 import LookingForDriver from "../Components/LookingForDriver";
 import WaitingForDriver from "../Components/WaitingForDriver";
+import axios from "axios";
 // Custom hook for GSAP animations
 const useGSAP = (animationCallback, dependencies) => {
   useEffect(() => {
@@ -140,6 +141,54 @@ const Home = () => {
       alert("Please fill in both fields!");
     }
   };
+const [suggestions, setSuggestions] = useState([]);
+const [selectedInput, setSelectedInput] = useState('');
+const debounceTimer = useRef(null);
+
+useEffect(() => {
+  if (formData.location || formData.destination) {
+    if (debounceTimer.current) {
+      clearTimeout(debounceTimer.current);
+    }
+
+    debounceTimer.current = setTimeout(async () => {
+      try {
+        const response = await axios.get(`${import.meta.env.VITE_BASE_URL}/maps/get-sugestions`, {
+          params: {input: selectedInput === 'location' ? formData.location : formData.destination},
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        });
+        setSuggestions(response.data);
+      } catch (error) {
+        console.error('Error fetching suggestions:', error);
+      }
+    }, 1000);
+   // console.log(formData);
+  }
+
+  return () => {
+    if (debounceTimer.current) {
+      clearTimeout(debounceTimer.current);
+    }
+  };
+}, [formData.location, formData.destination]);
+
+// Clear suggestions when input is clicked
+  useEffect(() => {
+    setSuggestions([]);
+  }
+  , [selectedInput]);
+
+  //if formData.destination have value and suggestions array contains the value of formData.destination then close suggestion panel
+  useEffect(() => {
+    if (formData.location && formData.destination && suggestions.includes(formData.destination)) {
+      setPanelOpen(false);
+    }
+  }
+  , [formData]);
+
+  
 
   return (
     <div>
@@ -172,9 +221,10 @@ const Home = () => {
                 type="text"
                 placeholder="Enter your location"
                 className="border-2 border-black px-8 py-2 text-base rounded-lg w-full mt-2"
-                onClick={() => setPanelOpen(true)}
+                onClick={() => {setPanelOpen(true);setSelectedInput('location')}}
                 value={formData.location}
                 onChange={handleChange}
+                required
               />
               <input
                 name="destination"
@@ -182,14 +232,30 @@ const Home = () => {
                 placeholder="Enter your destination"
                 className="border-2 border-black px-8 py-2 text-base rounded-lg w-full mt-3"
                 value={formData.destination}
+                onClick={() => {setPanelOpen(true);setSelectedInput('destination')}}
                 onChange={handleChange}
+                required
               />
+              <button
+                type="submit"
+                className="bg-black text-white w-full py-2 rounded-lg mt-3"
+                onClick={() => {
+                  setVehiclePanel(true);
+                }
+                }
+              >
+                Find Trip
+              </button>
             </form>
           </div>
           <div ref={panalRef} className="bg-gray-100">
             <LocationSearchPanel
               vehiclePanel={vehiclePanel}
               setVehiclePanel={setVehiclePanel}
+              suggestions={suggestions}
+              setFormData={setFormData}
+              selectedInput={selectedInput}
+              formData={formData}
             />
           </div>
         </div>

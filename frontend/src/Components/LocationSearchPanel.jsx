@@ -1,20 +1,19 @@
-import React from "react";
 
-const LocationSearchPanel = ({ vehiclePanel, setVehiclePanel }) => {
-  const shopLocations = [
-    "Sadar Bazaar, Chandni Chowk, Delhi 110006",
-    "Fashion Street, Colaba Causeway, Mumbai, Maharashtra 400005",
-    "Commercial Street, Shivajinagar, Bengaluru, Karnataka 560001",
-    "Johari Bazaar, Gangori Bazar, Jaipur, Rajasthan 302001",
-    "T Nagar, Usman Road, Chennai, Tamil Nadu 600017",
-    "Mubarakpur, Lalganj Raebareli, Uttar Pradesh",
-  ];
+import { useEffect } from "react";
+const LocationSearchPanel = ({ vehiclePanel, setVehiclePanel,suggestions,setFormData,selectedInput,formData }) => {
+  // useEffect(() => {
+  //   if (formData.location && formData.destination && 
+  //       suggestions.includes(formData.destination)) {
+  //     setVehiclePanel(true);
+  //   }
+  // }, [formData, suggestions, setVehiclePanel]);
 
+ 
   return (
     <div>
-      {shopLocations.map((location, index) => (
+      {suggestions.map((location, index) => (
         <div
-          onClick={() => setVehiclePanel(true)}
+          onClick={() => {setFormData({ ...formData, [selectedInput]: location });}}
           key={index}
           className="flex border-2 p-1 bg-white m-1 select-none cursor-pointer rounded-xl my-2 border-white active:border-black gap-4 shadow-sm items-center justify-start"
         >

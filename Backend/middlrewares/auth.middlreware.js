@@ -66,6 +66,7 @@ async function authCaptain(req, res, next) {
 
     // Attach the user to the request object
     req.user = await CaptainModel.findById(decoded._id);
+    
 
     if (!req.user) {
       return res.status(401).json({ message: "Unauthorized: User not found" });
