@@ -7,6 +7,8 @@ import ConfirmRide from "../Components/ConfirmRide";
 import LookingForDriver from "../Components/LookingForDriver";
 import WaitingForDriver from "../Components/WaitingForDriver";
 import axios from "axios";
+import { useSocket } from "../Context/SocketContext";
+import { useUserData } from "../Context/UserContext";
 // Custom hook for GSAP animations
 const useGSAP = (animationCallback, dependencies) => {
   useEffect(() => {
@@ -32,6 +34,14 @@ const Home = () => {
     location: "",
     destination: "",
   });
+
+  const { socket } = useSocket();
+  const { user } = useUserData();
+
+  useEffect(() => {
+    
+    user._id && socket.emit("join", { userId: user._id, isCaptain: false });
+  }, [user._id, socket]);
 
   // Handle form input changes
   const handleChange = (e) => {

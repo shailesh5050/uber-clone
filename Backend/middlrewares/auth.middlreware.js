@@ -45,7 +45,7 @@ async function authCaptain(req, res, next) {
     // Get token from Authorization header or cookies
     const authHeader = req.headers.authorization;
     const token =
-      (authHeader && authHeader.split(" ")[1]) || req.cookies?.token;
+      (authHeader && authHeader.split(" ")[1]) || req.cookies?.captain_token;
 
     if (!token) {
       return res
@@ -65,10 +65,10 @@ async function authCaptain(req, res, next) {
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
 
     // Attach the user to the request object
-    req.user = await CaptainModel.findById(decoded._id);
+    req.captain = await CaptainModel.findById(decoded._id);
     
 
-    if (!req.user) {
+    if (!req.captain) {
       return res.status(401).json({ message: "Unauthorized: User not found" });
     }
 

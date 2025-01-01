@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { Link } from "react-router-dom";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
@@ -12,7 +12,7 @@ const CaptainLogin = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
-  const { setCaptainData } = useCaptainData();
+  const { setCaptain } = useCaptainData();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -30,9 +30,11 @@ const CaptainLogin = () => {
 
       if (response.data.token) {
         localStorage.setItem("captain-token", response.data.token);
-        setCaptainData(response.data.captain);
+        setCaptain(response.data.captain);
         setIsLoggedIn(true);
-        toast.success("Login successful!");
+        navigate("/captain-home");
+       // toast.success("Login successful!");
+        
         navigate("/captain-home");
       }
     } catch (error) {
@@ -42,11 +44,6 @@ const CaptainLogin = () => {
       setPassword("");
       setEmail("");
     }
-
-    setUserData({ email, password });
-    console.log("Login attempted:", userData);
-    setPassword("");
-    setEmail("");
   };
 
   return (

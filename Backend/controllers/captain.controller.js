@@ -47,7 +47,7 @@ export async function loginCaptain(req, res, next) {
       return res.status(401).json({ message: "Invalid email or password" });
     }
     const token = captain.generateAuthToken();
-    res.cookie("token", token, {
+    res.cookie("captain_token", token, {
       maxAge: 1000 * 60 * 60 * 24 * 7, // 1 week
       httpOnly: true,
     });

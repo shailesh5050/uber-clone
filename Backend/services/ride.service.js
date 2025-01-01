@@ -46,13 +46,14 @@ const createRide = async ({ userId, pickup, destination, vehicleType}) => {
    const fare = await getFare(pickup, destination);
    console.log(createOTP());
    const res = await RideModel.create({
-        userId,
+        user: userId,
         pickup,
         destination,
         fare: fare[vehicleType],
         otp: createOTP(),
     })
     return res;
+    
 };
 
 

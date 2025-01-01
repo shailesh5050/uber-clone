@@ -7,22 +7,73 @@ import axios from 'axios'
 import ConfirmRidePopUp from '../Components/ConfirmRidePopUp'
 import RidePopUp from '../Components/RidePopUp'
 import CaptainDetails from '../Components/CaptainDetails'
+import { useCaptainData } from '../Context/CaptainContext'
+import { useSocket } from '../Context/SocketContext'
 
 
 const CaptainHome = () => {
-
     const [ ridePopupPanel, setRidePopupPanel ] = useState(false)
     const [ confirmRidePopupPanel, setConfirmRidePopupPanel ] = useState(false)
-    
+    const { socket } = useSocket();
+    const {captain} = useCaptainData();
 
     const ridePopupPanelRef = useRef(null)
     const confirmRidePopupPanelRef = useRef(null)
     const [ ride, setRide ] = useState(null)
 
+    useEffect(() => {
+        
+        captain?._id && socket.emit("join", { userId: captain._id, isCaptain: true });
+        console.log("Captain joined with socket ID:", socket?.id);
+      }, [captain, socket]);
+
+useEffect(() => {
+    const intervalId = setInterval(() => {
+       
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition((position) => {
+                const { latitude, longitude } = position.coords;
+                socket.emit("update-location-captain", { 
+                    userId: captain._id, 
+                    location: { ltd: latitude, lng: longitude } 
+                });
+            });
+        }
+    }, 10000);
+
+    return () => clearInterval(intervalId);
+}, [captain?._id, socket]);
 
    
 
-   
+useEffect(() => {
+    console.log("Socket object:", socket);
+    console.log("Socket connected status:", socket?.connected);
+
+    if (!socket) {
+        console.warn("Socket is not initialized.");
+        return;
+    }
+
+    // Attach listener
+    console.log("Attaching 'new-ride' listener.");
+    socket.on("new-ride", (data) => {
+        console.log("New ride event received with data:", data);
+        if (data?.ride) {
+            console.log("Setting ride data and opening popup");
+            setRide(data.ride);
+            setRidePopupPanel(true);
+        } else {
+            console.warn("Invalid data received for 'new-ride':", data);
+        }
+    });
+
+    // Cleanup listener
+    return () => {
+        console.log("Detaching 'new-ride' listener.");
+        socket.off("new-ride");
+    };
+}, [socket]);
 
 
     useGSAP(function () {
@@ -82,3 +133,5 @@ const CaptainHome = () => {
 }
 
 export default CaptainHome
+
+

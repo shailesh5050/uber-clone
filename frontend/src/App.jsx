@@ -12,6 +12,7 @@ import UserLogout from "./pages/UserLogout";
 import Riding from "./pages/Riding";
 import CaptainProtectWrapper from "./pages/CaptainProtectWrapper";
 import CaptainRiding from "./pages/CaptainRiding";
+
 const App = () => {
   return (
     <div className="">

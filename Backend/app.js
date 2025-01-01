@@ -13,7 +13,7 @@ import dbConnection from "./db/db.js";
 
 app.use(
   cors({
-    origin: "http://localhost:5173", // Allow your frontend's origin
+    origin: "*", // Allow your all's origin
     methods: ["GET", "POST", "PUT", "DELETE"], // Allowed HTTP methods
     credentials: true, // Allow credentials (cookies, authorization headers, etc.)
   })
