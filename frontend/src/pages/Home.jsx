@@ -9,6 +9,7 @@ import WaitingForDriver from "../Components/WaitingForDriver";
 import axios from "axios";
 import { useSocket } from "../Context/SocketContext";
 import { useUserData } from "../Context/UserContext";
+import { useNavigate } from "react-router-dom";
 // Custom hook for GSAP animations
 const useGSAP = (animationCallback, dependencies) => {
   useEffect(() => {
@@ -37,6 +38,9 @@ const Home = () => {
 
   const { socket } = useSocket();
   const { user } = useUserData();
+  const [rideData, setRideData] = useState(null);
+  const [rideConfirmed, setRideConfirmed] = useState(false);
+  const navigate = useNavigate();
 
   useEffect(() => {
     
@@ -233,8 +237,40 @@ useEffect(() => {
       console.error('Error booking ride:', error);  
     }
   }
-  
 
+  useEffect(() => {
+    
+    if (socket) {
+      
+      socket.on("ride-confirmed", (data) => {
+        console.log("Ride confirmed event received with data:", data);
+        if (data?.ride) {
+          setRideData(data.ride);
+          setVehiclePanel(false);
+          setWaitingForDriverPanelOpen(true);
+         
+        } else {
+          console.warn("Invalid data received for 'ride-confirmed':", data);
+        }
+      });
+    }
+},[socket])
+  
+  useEffect(() => {
+    if (socket) {
+      socket.on("ride-started", (data) => {
+        console.log("Ride started event received with data:", data);
+        if (data?.ride) {
+        
+          setWaitingForDriverPanelOpen(false);
+          navigate("/riding", { state: { ride: data.ride } });
+
+        } else {
+          console.warn("Invalid data received for 'ride-started':", data);
+        }
+      });
+    }
+  },[socket])
   return (
     <div>
       <img
@@ -346,7 +382,7 @@ useEffect(() => {
         ref={waitingForDriverPanelRef}
         className="fixed w-full z-10 bottom-0 bg-white px-3 py-10 pt-14 translate-y-full"
       >
-        <WaitingForDriver setWaitingForDriverPanelOpen={setWaitingForDriverPanelOpen} />
+        <WaitingForDriver rideData={rideData} setWaitingForDriverPanelOpen={setWaitingForDriverPanelOpen} />
       </div>
     </div>
   );
