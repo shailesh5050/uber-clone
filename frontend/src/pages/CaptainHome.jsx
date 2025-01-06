@@ -13,17 +13,17 @@ import { useSocket } from "../Context/SocketContext";
 const CaptainHome = () => {
   const [ridePopupPanel, setRidePopupPanel] = useState(false);
   const [confirmRidePopupPanel, setConfirmRidePopupPanel] = useState(false);
+  const [ride, setRide] = useState(null);
+  const [error, setError] = useState(null);
   const { socket } = useSocket();
   const { captain } = useCaptainData();
 
   const ridePopupPanelRef = useRef(null);
   const confirmRidePopupPanelRef = useRef(null);
-  const [ride, setRide] = useState(null);
 
   useEffect(() => {
     captain?._id &&
       socket.emit("join", { userId: captain._id, isCaptain: true });
-    console.log("Captain joined with socket ID:", socket?.id);
   }, [captain, socket]);
 
   useEffect(() => {
@@ -43,30 +43,21 @@ const CaptainHome = () => {
   }, [captain?._id, socket]);
 
   useEffect(() => {
-    console.log("Socket object:", socket);
-    console.log("Socket connected status:", socket?.connected);
-
     if (!socket) {
-      console.warn("Socket is not initialized.");
+      setError("Socket connection error");
       return;
     }
 
-    // Attach listener
-    console.log("Attaching 'new-ride' listener.");
     socket.on("new-ride", (data) => {
-      console.log("New ride event received with data:", data);
       if (data?.ride) {
-        console.log("Setting ride data and opening popup");
         setRide(data.ride);
         setRidePopupPanel(true);
       } else {
-        console.warn("Invalid data received for 'new-ride':", data);
+        setError("Invalid ride data received");
       }
     });
 
-    // Cleanup listener
     return () => {
-      console.log("Detaching 'new-ride' listener.");
       socket.off("new-ride");
     };
   }, [socket]);
@@ -101,7 +92,7 @@ const CaptainHome = () => {
     [confirmRidePopupPanel]
   );
 
-  async function confirmRide() {
+  const confirmRide = async () => {
     try {
       const response = await axios.post(
         `${import.meta.env.VITE_BASE_URL}/ride/confirm`,
@@ -115,15 +106,11 @@ const CaptainHome = () => {
           },
         }
       );
-      console.log(response);
       setRidePopupPanel(false);
     } catch (error) {
-      console.error(error);
+      setError("Error confirming ride");
     }
-  }
-
-
-  
+  };
 
   return (
     <div className="h-screen">
@@ -169,9 +156,9 @@ const CaptainHome = () => {
           ride={ride}
           setConfirmRidePopupPanel={setConfirmRidePopupPanel}
           setRidePopupPanel={setRidePopupPanel}
-         
         />
       </div>
+      {error && <div className="fixed top-0 left-0 w-full h-screen bg-red-500 text-white p-4">{error}</div>}
     </div>
   );
 };

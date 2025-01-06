@@ -171,7 +171,7 @@ useEffect(() => {
         });
         setSuggestions(response.data);
       } catch (error) {
-        console.error('Error fetching suggestions:', error);
+        setError('Error fetching suggestions');
       }
     }, 1000);
    // console.log(formData);
@@ -211,7 +211,7 @@ useEffect(() => {
       });
       setFair(response.data);
     } catch (error) {
-      console.error('Error fetching fair:', error);
+      setError('Error fetching fair');
     }
   }
   function findTrip() {
@@ -234,7 +234,7 @@ useEffect(() => {
       });
       setLookingForDriverPanelOpen(true);
     } catch (error) {
-      console.error('Error booking ride:', error);  
+      setError('Error booking ride');
     }
   }
 
@@ -243,14 +243,13 @@ useEffect(() => {
     if (socket) {
       
       socket.on("ride-confirmed", (data) => {
-        console.log("Ride confirmed event received with data:", data);
         if (data?.ride) {
           setRideData(data.ride);
           setVehiclePanel(false);
           setWaitingForDriverPanelOpen(true);
          
         } else {
-          console.warn("Invalid data received for 'ride-confirmed':", data);
+          setError('Invalid data received for ride-confirmed');
         }
       });
     }
@@ -259,14 +258,13 @@ useEffect(() => {
   useEffect(() => {
     if (socket) {
       socket.on("ride-started", (data) => {
-        console.log("Ride started event received with data:", data);
         if (data?.ride) {
         
           setWaitingForDriverPanelOpen(false);
           navigate("/riding", { state: { ride: data.ride } });
 
         } else {
-          console.warn("Invalid data received for 'ride-started':", data);
+          setError('Invalid data received for ride-started');
         }
       });
     }
