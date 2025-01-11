@@ -1,7 +1,8 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { useUserData } from "../Context/UserContext";
+import toast from "react-hot-toast";
 
 const UserRegister = () => {
   const navigate = useNavigate();
@@ -11,13 +12,16 @@ const UserRegister = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
-  const { user, setUser } = useUserData();
+  const { setUser } = useUserData();
   const handleSubmit = async (e) => {
     e.preventDefault();
 
     // Basic validation
     if (password !== confirmPassword) {
-      alert("Passwords do not match!");
+      toast.error("Passwords do not match!", {
+        duration: 4000,
+        position: "bottom-center"
+      });
       return;
     }
 
@@ -38,16 +42,24 @@ const UserRegister = () => {
       );
 
       if (res.status === 201) {
-        alert("Account created successfully");
+        toast.success("Account created successfully!", {
+          duration: 4000,
+          position: "bottom-center"
+        });
         setUser(res.data.user);
         localStorage.setItem("token", res.data.token);
         navigate("/login");
       } else {
-        alert(res.data.message);
+        toast.error(res.data.message || "Registration failed", {
+          duration: 4000,
+          position: "bottom-center"
+        });
       }
     } catch (error) {
       console.error(error);
-      alert(error.response?.data?.message || "An error occurred");
+      toast.error(error.response?.data?.message || "An error occurred", {
+        duration: 4000,
+      });
     }
 
     // Reset form fields

@@ -1,8 +1,9 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { Link } from "react-router-dom";
 import { useCaptainData } from "../Context/CaptainContext";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import toast from "react-hot-toast";
 const CaptainSignup = () => {
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
@@ -13,7 +14,7 @@ const CaptainSignup = () => {
   const [vehiclePlate, setVehiclePlate] = useState("");
   const [vehicleCapacity, setVehicleCapacity] = useState("");
 
-  const { captain, setCaptain } = useCaptainData();
+  const { setCaptain } = useCaptainData();
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
@@ -50,10 +51,12 @@ const CaptainSignup = () => {
       }
     } catch (error) {
       console.error(error);
-      alert(error.response?.data?.message || "An error occurred");
+      toast.error(error.response?.data?.message || "An error occurred", {
+        duration: 4000,
+      });
     }
 
-    console.log("Registration attempted:", userData);
+    console.log("Registration attempted:", userDataObj);
 
     // Reset form fields
     setFirstName("");

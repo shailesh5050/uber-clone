@@ -3,6 +3,7 @@ import { Link, useLocation } from 'react-router-dom'
 import { useGSAP } from '@gsap/react'
 import gsap from 'gsap'
 import FinishRide from '../Components/FinishRide'
+import toast from 'react-hot-toast'
 
 
 const CaptainRiding = () => {
@@ -39,6 +40,10 @@ const CaptainRiding = () => {
 
             <div className='h-1/5 p-6 flex items-center justify-between relative bg-yellow-400 pt-10'
                 onClick={() => {
+                    toast.loading('Preparing ride completion...', {
+                        duration: 1000,
+                        position: 'bottom-center'
+                    });
                     setFinishRidePanel(true)
                 }}
             >

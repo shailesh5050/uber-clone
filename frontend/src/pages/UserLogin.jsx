@@ -1,12 +1,11 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useUserData } from "../Context/UserContext";
 import axios from "axios";
+import toast from "react-hot-toast";
 const UserLogin = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [userData, setUserData] = useState({});
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
   const { setUser } = useUserData();
   const navigate = useNavigate();
   const handleSubmit = async (e) => {
@@ -21,19 +20,28 @@ const UserLogin = () => {
       );
 
       if (res.status === 200) {
-        alert("Login successfully");
+        toast.success("Login successful!", {
+          duration: 4000,
+          position: "bottom-center",
+        });
         setUser(res.data.user);
         localStorage.setItem("token", res.data.token);
         navigate("/home");
       } else {
-        alert(res.data.message);
+        toast.error(res.data.message || "Login failed", {
+          duration: 4000,
+          position: "bottom-center",
+        });
       }
     } catch (error) {
       console.error(error);
-      alert(error.response?.data?.message || "An error occurred");
+      toast.error(error.response?.data?.message || "An error occurred", {
+        duration: 4000,
+        position: "bottom-center",
+      });
     }
 
-    console.log("Login attempted:", userData);
+    console.log("Login attempted");
     setPassword("");
     setEmail("");
   };
