@@ -81,7 +81,7 @@ async function getCaptainInRadius(ltd, lng, radius) {
 
     // Return all captains
     const captains = await CaptainModel.find({});
-    console.log(`Total captains fetched: ${captains.length}`);
+    
 
   return captains;
 }

@@ -10,16 +10,7 @@ export async function createCaptainService({
   email,
   password,
 }) {
-  console.log({
-    firstname,
-    lastname,
-    plate,
-    color,
-    capacity,
-    vehicleType,
-    email,
-    password,
-  });
+  
   try {
     if (
       !firstname ||

@@ -53,7 +53,7 @@ function createOTP() {
 
 const createRide = async ({ userId, pickup, destination, vehicleType }) => {
   const fare = await getFare(pickup, destination);
-  console.log(createOTP());
+  
   const res = await RideModel.create({
     user: userId,
     pickup,
@@ -75,9 +75,7 @@ async function confirmRide(rideId, captainId) {
 
 async function startRide(rideId, otp, captain) {
   const ride = await RideModel.findOne({ _id: rideId });
-  console.log("===============Ride Service=========================");
-  console.log(ride);
-  console.timeLog(captain);
+  
   if (!ride) {
     throw new Error("Ride not found");
   }

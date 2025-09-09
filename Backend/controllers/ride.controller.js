@@ -16,10 +16,7 @@ export const createRide = async (req, res) => {
 
     // Get coordinates before creating ride
     const pickupCoordinates = await getAddressCoordinates(pickup);
-    console.log(
-      "Pickup coordinates:" + pickupCoordinates.lng,
-      pickupCoordinates.ltd
-    );
+    
     if (
       !pickupCoordinates ||
       !pickupCoordinates.ltd ||
@@ -41,7 +38,7 @@ export const createRide = async (req, res) => {
       1000
     );
 
-    console.log("Captains in range:", captainsInRange);
+    
 
     ride.otp = "";
 
@@ -56,16 +53,12 @@ export const createRide = async (req, res) => {
     if (!userWithRide.user) {
       console.error("Failed to populate user data for ride:", ride._id);
     } else {
-      console.log("User with ride:", userWithRide.toObject());
+      
     }
 
     // Then notify captains (after response is sent)
     if (captainsInRange && captainsInRange.length > 0) {
-      console.log(
-        "Notifying",
-        captainsInRange.length,
-        "captains about new ride"
-      );
+      
       captainsInRange.map(async (captain) => {
         try {
           await sendMessageToSocketId(captain.socketId, {
