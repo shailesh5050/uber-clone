@@ -1,6 +1,6 @@
-import app from "./app.js";
-import http from "http";
-import { initializeSocket } from "./socket.js";
+import app from './app.js';
+import http from 'http';
+import { initializeSocket } from './socket.js';
 
 const server = http.createServer(app);
 

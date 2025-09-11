@@ -1,0 +1,20 @@
+services:
+  backend:
+    build: ./backend
+    container_name: uber-backend
+    restart: always           # no “s”
+    env_file:
+      - ./Backend/.env
+    ports:
+      - "4000:4000"
+
+  frontend:
+    build: ./frontend
+    container_name: uber-frontend
+    restart: always           # no “s”
+    env_file:
+      - ./frontend/.env
+    ports:
+      - "5173:5173"           # space after dash
+    depends_on:
+      - backend

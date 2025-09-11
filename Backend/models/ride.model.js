@@ -1,9 +1,9 @@
-import mongoose from "mongoose";
+import mongoose from 'mongoose';
 
 const rideSchema = new mongoose.Schema({
   user: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: "User",
+    ref: 'User',
     required: true,
   },
   pickup: {
@@ -22,12 +22,12 @@ const rideSchema = new mongoose.Schema({
   },
   status: {
     type: String,
-    enum: ["ongoing", "pending", "accepted", "completed", "cancelled"],
-    default: "pending",
+    enum: ['ongoing', 'pending', 'accepted', 'completed', 'cancelled'],
+    default: 'pending',
   },
   captain: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: "Captain",
+    ref: 'Captain',
   },
   fare: {
     type: Number,
@@ -51,15 +51,14 @@ const rideSchema = new mongoose.Schema({
   },
   otp: {
     type: Number,
-    
   },
 });
 
-rideSchema.pre("save", function (next) {
+rideSchema.pre('save', function (next) {
   this.updatedAt = Date.now();
   next();
 });
 
-const Ride = mongoose.model("Ride", rideSchema);
+const Ride = mongoose.model('Ride', rideSchema);
 
 export default Ride;

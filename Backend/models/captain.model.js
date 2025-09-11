@@ -1,16 +1,16 @@
-import mongoose from "mongoose";
-import bcrypt from "bcrypt";
-import jwt from "jsonwebtoken";
+import mongoose from 'mongoose';
+import bcrypt from 'bcrypt';
+import jwt from 'jsonwebtoken';
 const captainSchema = new mongoose.Schema({
   fullname: {
     firstname: {
       type: String,
-      minlength: [3, "mim length should be 3"],
+      minlength: [3, 'mim length should be 3'],
       required: true,
     },
     lastname: {
       type: String,
-      minlength: [3, "mim length should be 3"],
+      minlength: [3, 'mim length should be 3'],
     },
   },
   email: {
@@ -21,13 +21,13 @@ const captainSchema = new mongoose.Schema({
   password: {
     type: String,
     required: true,
-    minlength: [6, "mim length should be 6"],
+    minlength: [6, 'mim length should be 6'],
   },
   socketId: String,
   status: {
     type: String,
-    enum: ["active", "inactive"],
-    default: "active",
+    enum: ['active', 'inactive'],
+    default: 'active',
   },
   vehicle: {
     color: {
@@ -60,7 +60,7 @@ const captainSchema = new mongoose.Schema({
 
 captainSchema.methods.generateAuthToken = function () {
   const token = jwt.sign({ _id: this._id }, process.env.JWT_SECRET, {
-    expiresIn: "1d",
+    expiresIn: '1d',
   });
   return token;
 };
@@ -75,6 +75,6 @@ captainSchema.methods.comparePassword = async function (password) {
   return await bcrypt.compare(password, this.password);
 };
 
-const CaptainModel = mongoose.model("Captain", captainSchema);
+const CaptainModel = mongoose.model('Captain', captainSchema);
 
 export default CaptainModel;

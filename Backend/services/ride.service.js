@@ -1,9 +1,9 @@
-import { get } from "http";
-import RideModel from "../models/ride.model.js";
-import { getDistanceTimeData } from "./maps.service.js";
-import crypto from "crypto";
-import UserModel from "../models/user.model.js";
-import CaptainModel from "../models/captain.model.js";
+import { get } from 'http';
+import RideModel from '../models/ride.model.js';
+import { getDistanceTimeData } from './maps.service.js';
+import crypto from 'crypto';
+import UserModel from '../models/user.model.js';
+import CaptainModel from '../models/captain.model.js';
 
 //functon to get fare based on time and distance
 async function getFare(pickup, destination) {
@@ -53,7 +53,7 @@ function createOTP() {
 
 const createRide = async ({ userId, pickup, destination, vehicleType }) => {
   const fare = await getFare(pickup, destination);
-  
+
   const res = await RideModel.create({
     user: userId,
     pickup,
@@ -67,7 +67,7 @@ const createRide = async ({ userId, pickup, destination, vehicleType }) => {
 async function confirmRide(rideId, captainId) {
   const updatedRide = await RideModel.findOneAndUpdate(
     { _id: rideId },
-    { $set: { captain: captainId, status: "accepted" } },
+    { $set: { captain: captainId, status: 'accepted' } },
     { new: true }
   );
   return updatedRide._id;
@@ -75,20 +75,20 @@ async function confirmRide(rideId, captainId) {
 
 async function startRide(rideId, otp, captain) {
   const ride = await RideModel.findOne({ _id: rideId });
-  
+
   if (!ride) {
-    throw new Error("Ride not found");
+    throw new Error('Ride not found');
   }
   if (ride.otp != otp) {
-    throw new Error("Invalid OTP");
+    throw new Error('Invalid OTP');
   }
 
-  if (ride.status == "ongoing") {
-    throw new Error("Ride already started");
+  if (ride.status == 'ongoing') {
+    throw new Error('Ride already started');
   }
   const updatedRide = await RideModel.findOneAndUpdate(
     { _id: rideId },
-    { $set: { captain: captain._id, status: "ongoing" } },
+    { $set: { captain: captain._id, status: 'ongoing' } },
     { new: true }
   );
   //get socket id from user and send to captain
@@ -111,7 +111,7 @@ async function startRide(rideId, otp, captain) {
 async function endRide(rideId, captain) {
   const updatedRide = await RideModel.findOneAndUpdate(
     { _id: rideId, captain: captain._id },
-    { $set: { status: "completed" } },
+    { $set: { status: 'completed' } },
     { new: true }
   );
   //get socket id from user and send to captain

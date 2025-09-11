@@ -1,20 +1,20 @@
-import { Server } from "socket.io";
-import UserModel from "./models/user.model.js";
-import CaptainModel from "./models/captain.model.js";
+import { Server } from 'socket.io';
+import UserModel from './models/user.model.js';
+import CaptainModel from './models/captain.model.js';
 let io;
 
 export function initializeSocket(server) {
   io = new Server(server, {
     cors: {
-      origin: "*",
-      methods: ["GET", "POST"],
+      origin: '*',
+      methods: ['GET', 'POST'],
     },
   });
-  io.on("connection", (socket) => {
-    console.log("A user connected:", socket.id);
+  io.on('connection', (socket) => {
+    console.log('A user connected:', socket.id);
 
-    socket.on("join", async (data) => {
-      console.log("User joined:", data);
+    socket.on('join', async (data) => {
+      console.log('User joined:', data);
       const { userId, isCaptain } = data;
       if (isCaptain) {
         const captain = await CaptainModel.findById(userId);
@@ -22,7 +22,9 @@ export function initializeSocket(server) {
           const oldSocketId = captain.socketId;
           captain.socketId = socket.id;
           await captain.save();
-          console.log(`Updated captain ${userId} socket ID from ${oldSocketId} to ${socket.id}`);
+          console.log(
+            `Updated captain ${userId} socket ID from ${oldSocketId} to ${socket.id}`
+          );
         }
       } else {
         const user = await UserModel.findById(userId);
@@ -30,39 +32,38 @@ export function initializeSocket(server) {
           const oldSocketId = user.socketId;
           user.socketId = socket.id;
           await user.save();
-          console.log(`Updated user ${userId} socket ID from ${oldSocketId} to ${socket.id}`);
+          console.log(
+            `Updated user ${userId} socket ID from ${oldSocketId} to ${socket.id}`
+          );
         }
       }
     });
 
-    socket.on("update-location-captain", async (data) => {
-      console.log("User updated location:", data);
+    socket.on('update-location-captain', async (data) => {
+      console.log('User updated location:', data);
       const { userId, location } = data;
       //validate location
       if (!location || !location.ltd || !location.lng) {
-
-        return socket.emit("error", "Location is invalid");
+        return socket.emit('error', 'Location is invalid');
       }
       try {
         const res = await CaptainModel.findByIdAndUpdate(
           userId,
           {
-        location: {
-          ltd: location.ltd,
-          lng: location.lng,
-        },
+            location: {
+              ltd: location.ltd,
+              lng: location.lng,
+            },
           },
           { new: true }
         );
       } catch (error) {
-        throw new Error("Error updating captain location:", error);
-       
+        throw new Error('Error updating captain location:', error);
       }
     });
-    
 
-    socket.on("disconnect", () => {
-      console.log("A user disconnected:", socket.id);
+    socket.on('disconnect', () => {
+      console.log('A user disconnected:', socket.id);
     });
 
     // ...additional socket event handlers...
@@ -71,13 +72,13 @@ export function initializeSocket(server) {
 
 export function sendMessageToSocketId(socketId, message) {
   if (io) {
-    console.log("Sending message to socket:", socketId, "Message:", message);
+    console.log('Sending message to socket:', socketId, 'Message:', message);
     if (message.event) {
       io.to(socketId).emit(message.event, message.data);
     } else {
-      io.to(socketId).emit("message", message);
+      io.to(socketId).emit('message', message);
     }
   } else {
-    console.error("Socket.io is not initialized.");
+    console.error('Socket.io is not initialized.');
   }
 }

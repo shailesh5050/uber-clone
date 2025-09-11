@@ -75,8 +75,10 @@ Register a new user in the system.
 ### Error Responses
 
 #### Validation Error
+
 - **Status Code:** 400
 - **Content:**
+
 ```json
 {
   "message": [
@@ -111,6 +113,7 @@ curl -X POST http://your-api-url/register \
     "password": "securepassword123"
   }'
 ```
+
 ## Endpoint: `/login`
 
 Authenticate an existing user and receive a JWT token.
@@ -166,8 +169,10 @@ Authenticate an existing user and receive a JWT token.
 ### Error Responses
 
 #### Validation Error
+
 - **Status Code:** 400
 - **Content:**
+
 ```json
 {
   "message": [
@@ -181,8 +186,10 @@ Authenticate an existing user and receive a JWT token.
 ```
 
 #### Authentication Error
+
 - **Status Code:** 400 or 401
 - **Content:**
+
 ```json
 {
   "message": "Invalid email or password"
@@ -214,7 +221,9 @@ I'll help you add documentation for the user logout route in the README.md file.
 
 ### Endpoint `/user/logout`
 ```
+
 POST user/logout
+
 ```
 
 ### Description
@@ -225,8 +234,10 @@ Requires a valid authentication token in the request header.
 
 ### Request Headers
 ```
+
 Authorization: Bearer <token>
-```
+
+````
 
 ### Response
 
@@ -235,11 +246,12 @@ Authorization: Bearer <token>
 {
   "message": "User logged out successfully"
 }
-```
+````
 
 #### Error Responses
 
 ##### Unauthorized (401)
+
 ```json
 {
   "error": "Unauthorized - Please login first"
@@ -247,9 +259,13 @@ Authorization: Bearer <token>
 ```
 
 ### Example Usage
+
 ```bash
 curl -X POST \
   http://localhost:3000/api/users/logout \
   -H 'Authorization: Bearer your-auth-token'
 ```
+
+```
+
 ```

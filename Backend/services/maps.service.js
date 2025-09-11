@@ -1,4 +1,4 @@
-import CaptainModel from "../models/captain.model.js";
+import CaptainModel from '../models/captain.model.js';
 
 async function getAddressCoordinates(address) {
   const MAP_KEY = process.env.MAP_KEY;
@@ -10,16 +10,16 @@ async function getAddressCoordinates(address) {
       throw new Error(`Error fetching data: ${response.statusText}`);
     }
     const data = await response.json();
-    if (data.status !== "OK") {
+    if (data.status !== 'OK') {
       throw new Error(`Geocoding error: ${data.status}`);
     }
     const location = data.results[0]?.geometry?.location;
     if (!location) {
-      throw new Error("Location not found");
+      throw new Error('Location not found');
     }
     return { ltd: location.lat, lng: location.lng };
   } catch (error) {
-    console.error("Failed to get address coordinates:", error);
+    console.error('Failed to get address coordinates:', error);
     throw error;
   }
 }
@@ -34,19 +34,19 @@ async function getDistanceTimeData(origin, destination) {
       throw new Error(`Error fetching data: ${response.statusText}`);
     }
     const data = await response.json();
-    if (data.status !== "OK") {
+    if (data.status !== 'OK') {
       throw new Error(`Distance matrix error: ${data.status}`);
     }
     const element = data.rows[0]?.elements[0];
     if (!element) {
-      throw new Error("Element not found");
+      throw new Error('Element not found');
     }
     return {
       distance: element.distance.text,
       duration: element.duration.text,
     };
   } catch (error) {
-    console.error("Failed to get distance and time:", error);
+    console.error('Failed to get distance and time:', error);
     throw error;
   }
 }
@@ -61,12 +61,12 @@ async function getSugestionsData(input) {
       throw new Error(`Error fetching data: ${response.statusText}`);
     }
     const data = await response.json();
-    if (data.status !== "OK") {
+    if (data.status !== 'OK') {
       throw new Error(`Place autocomplete error: ${data.status}`);
     }
     return data.predictions.map((prediction) => prediction.description);
   } catch (error) {
-    console.error("Failed to get suggestions:", error);
+    console.error('Failed to get suggestions:', error);
     throw error;
   }
 }
@@ -79,9 +79,8 @@ async function getCaptainInRadius(ltd, lng, radius) {
   //   },
   // });
 
-    // Return all captains
-    const captains = await CaptainModel.find({});
-    
+  // Return all captains
+  const captains = await CaptainModel.find({});
 
   return captains;
 }

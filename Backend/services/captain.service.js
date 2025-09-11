@@ -1,4 +1,4 @@
-import CaptainModel from "../models/captain.model.js";
+import CaptainModel from '../models/captain.model.js';
 
 export async function createCaptainService({
   firstname,
@@ -10,7 +10,6 @@ export async function createCaptainService({
   email,
   password,
 }) {
-  
   try {
     if (
       !firstname ||
@@ -22,7 +21,7 @@ export async function createCaptainService({
       !email ||
       !password
     ) {
-      throw new Error("Missing parameters");
+      throw new Error('Missing parameters');
     }
     const captain = await CaptainModel.create({
       fullname: {
