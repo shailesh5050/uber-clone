@@ -17,7 +17,12 @@ jobs:
           node-version: 18
 
       - name: Install backend dependencies
-        run: npm ci --prefix backend
+        run: |
+          if [ -f backend/package-lock.json ]; then
+            npm ci --prefix backend
+          else
+            npm install --prefix backend
+          fi
 
       - name: Run backend tests
         run: npm test --prefix backend
@@ -36,7 +41,12 @@ jobs:
           node-version: 18
 
       - name: Install frontend dependencies
-        run: npm ci --prefix frontend
+        run: |
+          if [ -f frontend/package-lock.json ]; then
+            npm ci --prefix frontend
+          else
+            npm install --prefix frontend
+          fi
 
       - name: Run frontend tests
         run: npm test --prefix frontend
