@@ -42,14 +42,14 @@ jobs:
 
       - name: Install frontend dependencies
         run: |
-          if [ -f Frontend/package-lock.json ]; then
-            npm ci --prefix Frontend
+          if [ -f frontend/package-lock.json ]; then
+            npm ci --prefix frontend
           else
-            npm install --prefix Frontend
+            npm install --prefix frontend
           fi
 
       - name: Run frontend tests
         run: echo "No tests specified yet, skipping..."
 
       - name: Build frontend Docker image
-        run: docker build -t frontend:ci ./Frontend
+        run: docker build -t frontend:ci ./frontend
