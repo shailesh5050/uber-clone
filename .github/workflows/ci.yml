@@ -18,17 +18,17 @@ jobs:
 
       - name: Install backend dependencies
         run: |
-          if [ -f backend/package-lock.json ]; then
-            npm ci --prefix backend
+          if [ -f Backend/package-lock.json ]; then
+            npm ci --prefix Backend
           else
-            npm install --prefix backend
+            npm install --prefix Backend
           fi
 
       - name: Run backend tests
-        run: npm test --prefix backend
+        run: npm test --prefix Backend
 
       - name: Build backend Docker image
-        run: docker build -t backend:ci ./backend
+        run: docker build -t backend:ci ./Backend
 
   frontend:
     runs-on: ubuntu-latest
