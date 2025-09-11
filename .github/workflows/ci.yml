@@ -17,12 +17,10 @@ jobs:
           node-version: 18
 
       - name: Install backend dependencies
-        working-directory: backend
-        run: npm ci
+        run: npm ci --prefix backend
 
       - name: Run backend tests
-        working-directory: backend
-        run: npm test
+        run: npm test --prefix backend
 
       - name: Build backend Docker image
         run: docker build -t backend:ci ./backend
@@ -38,12 +36,10 @@ jobs:
           node-version: 18
 
       - name: Install frontend dependencies
-        working-directory: frontend
-        run: npm ci
+        run: npm ci --prefix frontend
 
       - name: Run frontend tests
-        working-directory: frontend
-        run: npm test
+        run: npm test --prefix frontend
 
       - name: Build frontend Docker image
         run: docker build -t frontend:ci ./frontend
