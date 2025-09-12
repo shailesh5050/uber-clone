@@ -15,7 +15,7 @@ import CaptainRiding from "./pages/CaptainRiding";
 
 const App = () => {
   return (
-    <div className="">
+    <div className="min-h-screen-safe bg-gray-50">
       <Routes>
         <Route path="/" element={<Start />} />
         <Route path="/login" element={<UserLogin />} />

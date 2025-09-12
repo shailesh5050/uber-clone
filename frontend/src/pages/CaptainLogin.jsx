@@ -47,20 +47,20 @@ const CaptainLogin = () => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-100 px-4">
+    <div className="min-h-screen-safe flex items-center justify-center bg-gray-100 spacing-responsive-x pt-safe pb-safe">
       <div className="w-full max-w-md">
         <form
           onSubmit={handleSubmit}
-          className="bg-white shadow-md rounded-lg px-8 pt-6 pb-8 mb-4"
+          className="bg-white shadow-lg rounded-xl spacing-responsive mb-4"
         >
-          <h2 className="text-2xl font-bold text-center text-gray-800 mb-6">
+          <h2 className="text-responsive-2xl font-bold text-center text-gray-800 mb-6 sm:mb-8">
             Captain Login
           </h2>
 
-          <div className="mb-4">
+          <div className="mb-4 sm:mb-6">
             <label
               htmlFor="email"
-              className="block text-gray-700 text-sm font-bold mb-2"
+              className="block text-gray-700 text-responsive-sm font-bold mb-2"
             >
               Email
             </label>
@@ -71,16 +71,16 @@ const CaptainLogin = () => {
               onChange={(e) => setEmail(e.target.value)}
               placeholder="Enter your email"
               required
-              className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 
+              className="btn-touch shadow appearance-none border rounded-lg w-full py-3 sm:py-4 px-4 text-gray-700 
                          leading-tight focus:outline-none focus:ring-2 focus:ring-blue-500 
-                         focus:border-transparent"
+                         focus:border-transparent text-responsive-base"
             />
           </div>
 
-          <div className="mb-6">
+          <div className="mb-6 sm:mb-8">
             <label
               htmlFor="password"
-              className="block text-gray-700 text-sm font-bold mb-2"
+              className="block text-gray-700 text-responsive-sm font-bold mb-2"
             >
               Password
             </label>
@@ -91,42 +91,36 @@ const CaptainLogin = () => {
               onChange={(e) => setPassword(e.target.value)}
               placeholder="Enter your password"
               required
-              className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 
-                         mb-3 leading-tight focus:outline-none focus:ring-2 focus:ring-blue-500 
-                         focus:border-transparent"
+              className="btn-touch shadow appearance-none border rounded-lg w-full py-3 sm:py-4 px-4 text-gray-700 
+                         leading-tight focus:outline-none focus:ring-2 focus:ring-blue-500 
+                         focus:border-transparent text-responsive-base"
             />
           </div>
 
-          <div className="flex flex-col">
+          <div className="flex flex-col space-y-4">
             <button
               disabled={loading}
               type="submit"
-              className="bg-black text-white font-bold py-2 px-4 
-                         rounded focus:outline-none focus:shadow-outline transition duration-300 w-full"
+              className="btn-touch bg-black text-white font-bold py-3 sm:py-4 px-4 
+                         rounded-lg focus:outline-none focus:shadow-outline transition duration-300 w-full
+                         hover:bg-gray-800 active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed text-responsive-base"
             >
-              Sign In
+              {loading ? "Signing In..." : "Sign In"}
             </button>
-            <Link to="/captain-signup" className="text-center mb-10 mt-1">
-              <span>Join a Fleet ?</span>{" "}
-              <span className="text-blue-400">Create Account</span>
+            
+            <Link to="/captain-signup" className="text-center text-responsive-sm">
+              <span className="text-gray-600">Join a Fleet?</span>{" "}
+              <span className="text-blue-500 font-medium hover:text-blue-600">Create Account</span>
             </Link>
 
             <Link
               to="/login"
-              type="submit"
-              className="bg-green-600 flex justify-center items-center text-white  py-2 px-4 
-                         rounded focus:outline-none focus:shadow-outline transition duration-300 w-full"
+              className="btn-touch bg-green-600 flex justify-center items-center text-white py-3 sm:py-4 px-4 
+                         rounded-lg focus:outline-none focus:shadow-outline transition duration-300 w-full
+                         hover:bg-green-700 active:scale-95 text-responsive-base font-medium"
             >
               Sign In As User
             </Link>
-
-            {/* <a
-              to="/signup"
-              className="inline-block align-baseline font-bold text-sm text-black-500 
-                         hover:text-blue-800"
-            >
-              SignUp
-            </a> */}
           </div>
         </form>
       </div>

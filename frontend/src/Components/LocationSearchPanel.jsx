@@ -10,17 +10,17 @@ const LocationSearchPanel = ({ vehiclePanel, setVehiclePanel,suggestions,setForm
 
  
   return (
-    <div>
+    <div className="spacing-responsive">
       {suggestions.map((location, index) => (
         <div
           onClick={() => {setFormData({ ...formData, [selectedInput]: location });}}
           key={index}
-          className="flex border-2 p-1 bg-white m-1 select-none cursor-pointer rounded-xl my-2 border-white active:border-black gap-4 shadow-sm items-center justify-start"
+          className="btn-touch flex border-2 p-2 sm:p-3 bg-white mb-2 sm:mb-3 select-none cursor-pointer rounded-xl border-gray-200 hover:border-gray-300 active:border-black gap-3 sm:gap-4 shadow-sm items-center justify-start transition-all duration-200 active:scale-95"
         >
-          <h2 className="bg-[#eee] p-3 rounded-full m-1">
-            <i className="ri-map-pin-2-fill"></i>
-          </h2>
-          <h4 className="font-medium">{location}</h4>
+          <div className="bg-gray-100 p-2 sm:p-3 rounded-full flex-shrink-0">
+            <i className="ri-map-pin-2-fill text-responsive-sm text-gray-600"></i>
+          </div>
+          <h4 className="font-medium text-responsive-sm text-gray-800 flex-1 min-w-0 truncate">{location}</h4>
         </div>
       ))}
     </div>

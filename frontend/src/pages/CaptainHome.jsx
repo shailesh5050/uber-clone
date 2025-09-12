@@ -113,33 +113,36 @@ const CaptainHome = () => {
   };
 
   return (
-    <div className="h-screen">
-      <div className="fixed p-6 top-0 flex items-center justify-between w-screen">
+    <div className="min-h-screen-safe">
+      <div className="fixed spacing-responsive-x pt-safe top-0 flex items-center justify-between w-full z-10 bg-white/90 backdrop-blur-sm">
         <img
-          className="w-16"
+          className="w-12 sm:w-16 lg:w-20"
           src="https://upload.wikimedia.org/wikipedia/commons/c/cc/Uber_logo_2018.png"
-          alt=""
+          alt="Uber Logo"
         />
         <Link
           to="/captain-home"
-          className=" h-10 w-10 bg-white flex items-center justify-center rounded-full"
+          className="btn-touch h-10 w-10 sm:h-12 sm:w-12 bg-white flex items-center justify-center rounded-full shadow-md hover:shadow-lg transition-shadow duration-200 active:scale-95"
         >
-          <i className="text-lg font-medium ri-logout-box-r-line"></i>
+          <i className="text-lg sm:text-xl font-medium ri-logout-box-r-line"></i>
         </Link>
       </div>
-      <div className="h-3/5">
+      
+      <div className="h-[60%] sm:h-[65%] pt-16 sm:pt-20">
         <img
           className="h-full w-full object-cover"
           src="https://miro.medium.com/v2/resize:fit:1400/0*gwMx05pqII5hbfmX.gif"
-          alt=""
+          alt="Map Background"
         />
       </div>
-      <div className="h-2/5 p-6">
+      
+      <div className="h-[40%] sm:h-[35%] spacing-responsive pb-safe">
         <CaptainDetails />
       </div>
+      
       <div
         ref={ridePopupPanelRef}
-        className="fixed w-full z-10 bottom-0 translate-y-full bg-white px-3 py-10 pt-12"
+        className="fixed w-full z-20 bottom-0 translate-y-full bg-white spacing-responsive pt-8 sm:pt-12 pb-safe rounded-t-2xl shadow-2xl max-h-[85vh] overflow-y-auto"
       >
         <RidePopUp
           ride={ride}
@@ -148,9 +151,10 @@ const CaptainHome = () => {
           confirmRide={confirmRide}
         />
       </div>
+      
       <div
         ref={confirmRidePopupPanelRef}
-        className="fixed w-full h-screen z-10 bottom-0 translate-y-full bg-white px-3 py-10 pt-12"
+        className="fixed w-full h-screen z-20 bottom-0 translate-y-full bg-white spacing-responsive pt-8 sm:pt-12 pb-safe overflow-y-auto"
       >
         <ConfirmRidePopUp
           ride={ride}
@@ -158,7 +162,15 @@ const CaptainHome = () => {
           setRidePopupPanel={setRidePopupPanel}
         />
       </div>
-      {error && <div className="fixed top-0 left-0 w-full h-screen bg-red-500 text-white p-4">{error}</div>}
+      
+      {error && (
+        <div className="fixed top-0 left-0 w-full h-screen bg-red-500 text-white spacing-responsive flex items-center justify-center z-30">
+          <div className="text-center">
+            <h3 className="text-responsive-xl font-bold mb-2">Error</h3>
+            <p className="text-responsive-base">{error}</p>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
