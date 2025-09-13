@@ -20,7 +20,7 @@ services:
       context: ./frontend
       dockerfile: dockerfile
       args:
-        VITE_API_URL: http://localhost:4000
+        VITE_API_URL: http://backend:4000
     container_name: uber-frontend
     restart: always
     env_file:
