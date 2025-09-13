@@ -1,16 +1,18 @@
 FROM node:20-alpine
 
-WORKDIR /app
+# Use the same working directory as docker-compose (keeps runtime paths consistent)
+WORKDIR /usr/src/app
 
-# only copy package files first
+# only copy package files first (cache deps)
 COPY package*.json ./
 
-# install deps inside the container
-RUN npm ci --only=production
+# install all deps inside the container (including nodemon)
+RUN npm ci
 
 # now copy the rest of your app
 COPY . .
 
 EXPOSE 4000
 
-CMD ["node", "server.js"]
+# Default to the npm start script (docker-compose may override)
+CMD ["npm", "run", "start"]

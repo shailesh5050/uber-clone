@@ -1,20 +1,37 @@
 services:
   backend:
-    build: ./backend
+    build:
+      context: ./Backend
+      dockerfile: Dockerfile
     container_name: uber-backend
-    restart: always           # no “s”
+    restart: always
     env_file:
       - ./Backend/.env
     ports:
       - "4000:4000"
+    volumes:
+      - ./Backend:/usr/src/app
+      - /usr/src/app/node_modules
+    working_dir: /usr/src/app
+    command: ["npm", "run", "start"]
 
   frontend:
-    build: ./frontend
+    build:
+      context: ./frontend
+      dockerfile: dockerfile
+      args:
+        VITE_API_URL: http://localhost:4000
     container_name: uber-frontend
-    restart: always           # no “s”
+    restart: always
     env_file:
       - ./frontend/.env
     ports:
-      - "5173:5173"           # space after dash
+      - "5173:5173"
     depends_on:
       - backend
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
+    working_dir: /app
+    command: ["npm", "run", "dev", "--", "--host"]
+
